@@ -1,3 +1,15 @@
 import { PrismaClient } from '@prisma/client'
 
-export const db = new PrismaClient()
+declare global {
+  // allow global `var` declarations
+  // eslint-disable-next-line no-var
+  var prisma: PrismaClient | undefined
+}
+
+export const prisma =
+  global.prisma ||
+  new PrismaClient({
+    errorFormat: 'pretty',
+  })
+
+if (import.meta.env.PROD === true) global.prisma = prisma

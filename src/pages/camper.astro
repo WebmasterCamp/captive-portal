@@ -1,29 +1,53 @@
 ---
 import Blank from '$layout/blank.astro'
 import Success from 'src/components/success.astro';
+import { prisma } from 'src/db'
 
 type Mode = 'login' | 'success'
 let mode = 'login'
 
 // on POST
 if (Astro.request.method === 'POST') {
+  async function validateCredentials(nickname: any, idCard: any) {
+    if (typeof nickname !== 'string' || typeof idCard !== 'string') {
+      return false
+    }
+
+    const camper = await prisma.camper.findFirst({
+      where: {
+        citizenId: idCard
+      }
+    })
+    if (!camper) {
+      return false
+    }
+
+    await prisma.camperLogin.create({
+      data: {
+        camperId: camper.id,
+        nickname
+      }
+    })
+    return true
+  }
+  
   // validate
   try {
     const data = await Astro.request.formData()
 
     const nickname = data.get('nickname')
     const idCard = data.get('idCard')
-
-    console.log(data)
-
-    if (nickname === 'mock') {
+    
+    const ok = await validateCredentials(nickname, idCard)
+    if (ok) {
       mode = 'success'
-      return Astro.redirect('https://ywc.in.th')
     } else {
       mode = 'Nickname or ID card is incorrect'
       Astro.response.status = 401
     }
   } catch (e) {
+    console.error(e)
+    mode = 'Unexpected error'
     Astro.response.status = 401
   }
 }
@@ -36,7 +60,7 @@ if (Astro.request.method === 'POST') {
   <h1 class="text-4xl font-bold text-white text-center pb-10">เข้าสู่ระบบ Wi-Fi</h1>
   {mode !== 'login' && (
     <div class="bg-red-300 p-6 font-serif rounded-2xl space-y-4 mb-6 text-red-950">
-      Failed to authenticate
+      {mode}
     </div>
   )}
   <form class="bg-[#f3f3f3] p-6 font-serif rounded-2xl space-y-4" method="post">
