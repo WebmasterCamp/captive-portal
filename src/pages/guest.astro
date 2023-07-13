@@ -34,6 +34,8 @@ if (Astro.request.method === 'POST') {
   try {
     const data = await Astro.request.formData()
 
+    console.log(data)
+
     const fullName = data.get('fullName')
     const ywcInfo = data.get('ywcInfo')
     const citizenId = data.get('citizenId')

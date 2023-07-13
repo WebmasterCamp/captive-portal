@@ -35,6 +35,8 @@ if (Astro.request.method === 'POST') {
   try {
     const data = await Astro.request.formData()
 
+    console.log(data)
+
     const nickname = data.get('nickname')
     const idCard = data.get('idCard')
     
