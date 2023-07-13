@@ -3,7 +3,7 @@ FROM node:18-alpine AS deps-prod
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml* ./
-RUN npx pnpm -r i --frozen-lockfile --prod
+RUN npx pnpm -r i --frozen-lockfile --prod && npx pnpm prisma generate
 
 # ? -------------------------
 
