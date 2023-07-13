@@ -26,3 +26,10 @@ model CamperLogin {
   camper   Camper @relation(fields: [camperId], references: [id])
   camperId String @map("camper") @db.ObjectId
 }
+
+model GuestLogin {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  fullName  String
+  ywcInfo   String
+  citizenId String
+}

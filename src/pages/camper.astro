@@ -18,6 +18,7 @@ if (Astro.request.method === 'POST') {
 
     if (nickname === 'mock') {
       mode = 'success'
+      return Astro.redirect('https://ywc.in.th')
     } else {
       mode = 'Nickname or ID card is incorrect'
       Astro.response.status = 401
