@@ -1,16 +1,13 @@
-FROM node:18-slim AS deps-prod
+FROM node:18-alpine AS deps-prod
 
 WORKDIR /app
-
-RUN mkdir -p /opt && \
-    cp -a --parents /lib/*/libz.* /opt
 
 COPY package.json pnpm-lock.yaml* ./
 RUN npx pnpm -r i --frozen-lockfile --prod
 
 # ? -------------------------
 
-FROM node:18-slim as builder
+FROM node:18-alpine as builder
 
 WORKDIR /app
 
@@ -25,20 +22,19 @@ RUN npx pnpm build
 
 # ? -------------------------
 
-FROM gcr.io/distroless/nodejs18-debian11:nonroot as runner
+FROM node:18-alpine as runner
 
-USER nonroot
 EXPOSE 8080
 
 ENV NODE_ENV production
 ENV PORT 8080
 ENV TZ="Asia/Bangkok"
 
-COPY --from=builder /opt /
+COPY --from=deps-prod /opt /
 
 COPY package.json ./
-COPY --chown=nonroot:nonroot --from=deps-prod /app/node_modules ./node_modules
-COPY --chown=nonroot:nonroot --from=builder /app/dist ./dist
+COPY --from=deps-prod /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
 COPY server.mjs ./
 
 CMD ["./server.mjs"]
