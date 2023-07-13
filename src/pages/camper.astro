@@ -14,7 +14,7 @@ if (Astro.request.method === 'POST') {
     const nickname = data.get('nickname')
     const idCard = data.get('idCard')
 
-    console.log({ nickname, idCard })
+    console.log(data)
 
     if (nickname === 'mock') {
       mode = 'success'
