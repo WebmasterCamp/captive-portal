@@ -20,6 +20,7 @@ if (Astro.request.method === 'POST') {
       mode = 'success'
     } else {
       mode = 'Nickname or ID card is incorrect'
+      Astro.response.status = 401
     }
   } catch (e) {
     Astro.response.status = 401
