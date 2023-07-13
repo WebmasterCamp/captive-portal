@@ -1,0 +1,32 @@
+---
+import './index.css'
+import '@fontsource/ibm-plex-sans-thai'
+import '@fontsource/bai-jamjuree'
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Captive Portal</title>
+  </head>
+  <body class="space-y-16 py-10 px-6">
+    <header class="max-w-lg mx-auto">
+      <img src="/header-2.svg" alt="Young Webmaster Camp" class="mx-auto w-full max-w-[256px] h-auto" />
+      <div class="grid grid-cols-4 justify-evenly pt-8">
+        <img class="mx-auto shrink-0 scale-125" src="/twa.svg" />
+        <img class="mx-auto shrink-0 scale-125" src="/jitta.svg" />
+        <img class="mx-auto shrink-0 scale-125" src="/dods.svg" />
+        <img class="mx-auto shrink-0 scale-125" src="/scbx.svg" />
+      </div>
+    </header>
+    <main class="max-w-lg mx-auto">
+      <slot />
+    </main>
+    <footer class="max-w-lg mx-auto">
+      <img src="/footer.svg" alt="Support by Livingsoft" class="mx-auto w-full h-auto" />
+    </footer>
+  </body>
+</html>
