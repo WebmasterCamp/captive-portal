@@ -1,0 +1,90 @@
+---
+import Blank from '$layout/blank.astro'
+import Success from 'src/components/success.astro';
+import { prisma } from 'src/db'
+import { validateCitizenId } from 'src/validate'
+
+type Mode = 'login' | 'success' | string
+let mode: Mode = 'login'
+
+// on POST
+if (Astro.request.method === 'POST') {
+  async function validateCredentials(fullName: any, ywcInfo: any, citizenId: any) {
+    if (typeof fullName !== 'string' || typeof ywcInfo !== 'string' || typeof citizenId !== 'string') {
+      return false
+    }
+    if (!fullName.trim().length || !citizenId.trim().length) {
+      return false
+    }
+    if (!validateCitizenId(citizenId)) {
+      return false
+    }
+
+    await prisma.guestLogin.create({
+      data: {
+        fullName,
+        ywcInfo,
+        citizenId,
+      }
+    })
+    return true
+  }
+  
+  // validate
+  try {
+    const data = await Astro.request.formData()
+
+    const fullName = data.get('fullName')
+    const ywcInfo = data.get('ywcInfo')
+    const citizenId = data.get('citizenId')
+    
+    const ok = await validateCredentials(fullName, ywcInfo, citizenId)
+    if (ok) {
+      mode = 'success'
+    } else {
+      mode = 'Please enter all the required fields'
+      Astro.response.status = 401
+    }
+  } catch (e) {
+    console.error(e)
+    mode = 'Unexpected error'
+    Astro.response.status = 401
+  }
+}
+---
+
+{mode === 'success' ? (
+  <Success />
+) : (
+<Blank>
+  <h1 class="text-4xl font-bold text-white text-center pb-10">เข้าสู่ระบบ Wi-Fi</h1>
+  {mode !== 'login' && (
+    <div class="bg-red-300 p-6 font-serif rounded-2xl space-y-4 mb-6 text-red-950">
+      {mode}
+    </div>
+  )}
+  <form class="bg-[#f3f3f3] p-6 font-serif rounded-2xl space-y-4" method="post">
+    <div>
+      <label for="fullName" class="block"
+        >ชื่อ-นามสกุล<span class="text-red-500">*</span></label
+      >
+      <input id="fullName" name="fullName" type="text" class="w-full p-4 rounded-lg border border-[#777777]" required />
+    </div>
+    <div>
+      <label for="ywcInfo" class="block"
+        >รุ่นและสาขา YWC (ถ้ามี)</label
+      >
+      <input id="ywcInfo" name="ywcInfo" type="text" class="w-full p-4 rounded-lg border border-[#777777]" required />
+    </div>
+    <div>
+      <label for="citizenId" class="block"
+        >เลขบัตรประจำตัวประชาชน<span class="text-red-500">*</span></label
+      >
+      <input id="citizenId" name="citizenId" type="text" class="w-full p-4 rounded-lg border border-[#777777]" required />
+    </div>
+    <div class="flex justify-center">
+      <button class="font-semibold px-6 py-4 rounded-lg bg-[#07e23e]">เข้าสู่ระบบ</button>
+    </div>
+  </form>
+</Blank>
+)}
