@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Camper {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  interviewRef String
+  nickname     String
+  citizenId    String
+
+  camperLogin CamperLogin[]
+}
+
+model CamperLogin {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  nickname String
+
+  camper   Camper @relation(fields: [camperId], references: [id])
+  camperId String @map("camper") @db.ObjectId
+}
