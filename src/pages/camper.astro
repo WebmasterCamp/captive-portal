@@ -85,7 +85,7 @@ if (Astro.request.method === 'POST') {
       <input id="idCard" name="idCard" type="text" class="w-full p-4 rounded-lg border border-[#777777]" required />
     </div>
     <div class="flex justify-end">
-      <a href="/guest" class="underline">สำหรับ staff/guest</a>
+      <a href={`/guest?${Astro.url.searchParams.toString()}`} class="underline">สำหรับ staff/guest</a>
     </div>
     <div class="flex justify-center">
       <HiddenGroup />
