@@ -12,7 +12,7 @@ let mode: Mode = 'login'
 
 // on POST
 if (Astro.request.method === 'POST') {
-  async function validateCredentials(fullName: any, ywcInfo: any, citizenId: any) {
+  async function validateCredentials(fullName: any, ywcInfo: any, citizenId: any, macAddress: any) {
     if (typeof fullName !== 'string' || typeof ywcInfo !== 'string' || typeof citizenId !== 'string') {
       return false
     }
@@ -28,6 +28,7 @@ if (Astro.request.method === 'POST') {
         fullName,
         ywcInfo,
         citizenId,
+        macAddress,
       }
     })
     return true
@@ -46,7 +47,7 @@ if (Astro.request.method === 'POST') {
 
     macAddr = macAddress?.toString() ?? ''
     
-    const ok = await validateCredentials(fullName, ywcInfo, citizenId)
+    const ok = await validateCredentials(fullName, ywcInfo, citizenId, macAddress)
     if (ok) {
       mode = 'success'
     } else {

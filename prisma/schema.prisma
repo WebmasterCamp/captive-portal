@@ -20,16 +20,18 @@ model Camper {
 }
 
 model CamperLogin {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  nickname String
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  nickname   String
+  macAddress String
 
   camper   Camper @relation(fields: [camperId], references: [id])
   camperId String @map("camper") @db.ObjectId
 }
 
 model GuestLogin {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  fullName  String
-  ywcInfo   String
-  citizenId String
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  fullName   String
+  ywcInfo    String
+  citizenId  String
+  macAddress String
 }

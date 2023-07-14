@@ -11,7 +11,7 @@ let macAddr: string = ''
 
 // on POST
 if (Astro.request.method === 'POST') {
-  async function validateCredentials(nickname: any, idCard: any) {
+  async function validateCredentials(nickname: any, idCard: any, macAddress: any) {
     if (typeof nickname !== 'string' || typeof idCard !== 'string') {
       return false
     }
@@ -28,7 +28,8 @@ if (Astro.request.method === 'POST') {
     await prisma.camperLogin.create({
       data: {
         camperId: camper.id,
-        nickname
+        nickname,
+        macAddress,
       }
     })
     return true
@@ -46,7 +47,7 @@ if (Astro.request.method === 'POST') {
 
     macAddr = macAddress?.toString() ?? ''
     
-    const ok = await validateCredentials(nickname, idCard)
+    const ok = await validateCredentials(nickname, idCard, macAddress)
     if (ok) {
       mode = 'success'
     } else {
