@@ -1,8 +1,11 @@
 ---
 import Blank from '$layout/blank.astro'
+import HiddenGroup from 'src/components/hiddenGroup.astro';
 import Success from 'src/components/success.astro';
 import { prisma } from 'src/db'
 import { validateCitizenId } from 'src/validate'
+
+let macAddr: string = ''
 
 type Mode = 'login' | 'success' | string
 let mode: Mode = 'login'
@@ -39,6 +42,9 @@ if (Astro.request.method === 'POST') {
     const fullName = data.get('fullName')
     const ywcInfo = data.get('ywcInfo')
     const citizenId = data.get('citizenId')
+    const macAddress = data.get('mac')
+
+    macAddr = macAddress?.toString() ?? ''
     
     const ok = await validateCredentials(fullName, ywcInfo, citizenId)
     if (ok) {
@@ -56,7 +62,7 @@ if (Astro.request.method === 'POST') {
 ---
 
 {mode === 'success' ? (
-  <Success />
+  <Success macAddr={macAddr} />
 ) : (
 <Blank>
   <h1 class="text-4xl font-bold text-white text-center pb-10">เข้าสู่ระบบ Wi-Fi Guest</h1>
@@ -85,6 +91,7 @@ if (Astro.request.method === 'POST') {
       <input id="citizenId" name="citizenId" type="text" class="w-full p-4 rounded-lg border border-[#777777]" required />
     </div>
     <div class="flex justify-center">
+      <HiddenGroup />
       <button class="font-semibold px-6 py-4 rounded-lg bg-[#07e23e]">เข้าสู่ระบบ</button>
     </div>
   </form>

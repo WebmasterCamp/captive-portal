@@ -11,11 +11,13 @@
     "db:generate": "prisma generate"
   },
   "dependencies": {
+    "@astrojs/svelte": "^3.1.0",
     "@fastify/middie": "^8.3.0",
     "@fastify/static": "^6.10.2",
     "@prisma/client": "^5.0.0",
+    "fastify": "^4.19.2",
     "prisma": "^5.0.0",
-    "fastify": "^4.19.2"
+    "svelte": "^4.0.5"
   },
   "devDependencies": {
     "@astrojs/node": "^5.3.0",

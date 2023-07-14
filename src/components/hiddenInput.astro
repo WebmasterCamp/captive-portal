@@ -1,0 +1,10 @@
+---
+export interface Props {
+  inputName: string
+}
+
+const { inputName } = Astro.props
+const value = Astro.url.searchParams.get(inputName)
+---
+
+<input type="hidden" name={inputName} value={value} />

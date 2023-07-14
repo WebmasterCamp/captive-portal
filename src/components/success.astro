@@ -1,14 +1,23 @@
 ---
 import Blank from '$layout/blank2.astro'
+
+export interface Props {
+  macAddr: string
+}
+
+const finalUrl = 'http://login.ywc.loc/login?' + new URLSearchParams({
+  dst: '',
+  username: `T-${Astro.props.macAddr}`,
+}).toString()
 ---
 
 <Blank>
   <Fragment slot='head'>
-    <meta http-equiv="Refresh" content={'1; url=' + 'https://ywc.in.th'} />
+    <meta http-equiv="Refresh" content={'1; url=' + finalUrl} />
   </Fragment>
   <p class="hidden">Aruba.InstantOn.Acknowledge</p>
   <h1 class="text-4xl font-bold text-white text-center pb-10">เข้าสู่ระบบสำเร็จ</h1>
   <div class="flex justify-center font-serif">
-    <a class="font-semibold px-6 py-4 rounded-lg bg-[#07e23e]" href="http://ywc.in.th">ปิด</a>
+    <a class="font-semibold px-6 py-4 rounded-lg bg-[#07e23e]" href={finalUrl}>ปิด</a>
   </div>
 </Blank>
