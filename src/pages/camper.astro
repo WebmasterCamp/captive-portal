@@ -4,8 +4,8 @@ import HiddenGroup from 'src/components/hiddenGroup.astro';
 import Success from 'src/components/success.astro';
 import { prisma } from 'src/db'
 
-type Mode = 'login' | 'success'
-let mode = 'login'
+type Mode = 'login' | 'success' | string
+let mode: Mode = 'login'
 
 let macAddr: string = ''
 
@@ -38,8 +38,6 @@ if (Astro.request.method === 'POST') {
   // validate
   try {
     const data = await Astro.request.formData()
-
-    console.log(data)
 
     const nickname = data.get('nickname')
     const idCard = data.get('idCard')
